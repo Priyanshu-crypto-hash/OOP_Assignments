@@ -1,12 +1,22 @@
 package com.company;
 
+import java.util.ArrayList;
 import java.util.Scanner;
+import java.util.ServiceLoader;
 
 
 public class Main {
-    int idCounter =0;
-
+    ArrayList<Vaccine> vacRecord = new ArrayList<Vaccine>();
+    ArrayList<Hospital> hospitalRecord = new ArrayList<Hospital>();
+    ArrayList<Citizens> citizenRecord = new ArrayList<Citizens>();
+    ArrayList<Slots> slotsRecord = new ArrayList<Slots>();
+    public class Hospital{}
+    public class Citizens{}
+    public class Slots{}
+    int hospitalIdCounter =0;
+    long citizenIDCounter =0;
     public void addVaccine(){
+        int gap;
         Scanner scn = new Scanner(System.in);
         System.out.println("Vaccine Name: ");
         String name = scn.next();
@@ -14,25 +24,36 @@ public class Main {
         int num = scn.nextInt();
         if (num!=1){
             System.out.println("Gap between Doses: ");
-            int gap = scn.nextInt();
+            gap = scn.nextInt();
             System.out.println("Vaccine Name: "+name+", Number of Doses: "+num+", Gap Between Doses: "+gap);
+            Vaccine obj = new Vaccine(name,num,gap);
         }
         else{
             System.out.println("Vaccine Name: "+name+", Number of Doses: "+num+", Gap Between Doses: "+0);
+            Vaccine obj = new Vaccine(name,num,0);
         }
-
-
 }
-public void regHospital(){
+public class Vaccine{
+        String name;
+        int num;
+        int gap;
+        public Vaccine (String name,int num,int gap){
+            this.name = name;
+            this.num = num;
+            this.gap=gap;
+        }
+}
+    public void regHospital(){
         Scanner scn = new Scanner(System.in);
         System.out.println("Hospital Name: ");
-        idCounter+=1;
-        int uniqueId = 200000+idCounter;
+        hospitalIdCounter+=1;
+        int uniqueId = 100000+hospitalIdCounter;
         String name = scn.next();
         int pin = scn.nextInt();
         System.out.println("Hospital Name: "+name+", Pincode: "+pin+", Unique ID: "+uniqueId);
 }
-public void makeSlots(){
+    public void makeSlots(){
+        String vaccine;
         Scanner scn = new Scanner(System.in);
         System.out.println("Enter Hospital ID: ");
         int hospitalID = scn.nextInt();
@@ -46,9 +67,33 @@ public void makeSlots(){
         System.out.println("Select Vaccine\n" +
                 "0. Covax\n" +
                 "1. Covi\n");
-        System.out.println("Slots added by Hospital "+hospitalID+" for Day: ");
+        int temp = scn.nextInt();
+        if (temp==0){
+            vaccine="Covax";
+        }
+        else{
+            vaccine="Covi";
+        System.out.println("Slots added by Hospital "+hospitalID+" for Day: "+dayNum+", Available Quantity: "+quantity+" of Vaccine "+vaccine);
     }
-}
+        }
+    }
+    public void regCititzen(){
+        citizenIDCounter+=1;
+        Scanner scn = new Scanner(System.in);
+        System.out.println("Citizen Name: ");
+        String name = scn.next();
+        System.out.println("Age: ");
+        int age = scn.nextInt();
+        System.out.println("Unique ID: ");
+        long uniqueID = scn.nextLong();
+        System.out.println("Citizen Name: "+name+", Age: "+age+", Unique ID: "+uniqueID);
+        if (age>18){
+            System.out.println("Only above 18 are allowed\n" +
+                    "--------------------------------");
+        }
+
+    }
+
     public static void main(String[] args) {
         Scanner scn = new Scanner(System.in);
         System.out.println("CoWin Portal initialized....\n" +
