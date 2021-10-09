@@ -2,7 +2,7 @@ package com.company;
 
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.ServiceLoader;
+
 
 
 public class Main {
@@ -10,16 +10,16 @@ public class Main {
     ArrayList<Hospital> hospitalRecord = new ArrayList<Hospital>();
     ArrayList<Citizens> citizenRecord = new ArrayList<Citizens>();
     ArrayList<Slots> slotsRecord = new ArrayList<Slots>();
-    public class Hospital{}
+
     public class Citizens{}
-    public class Slots{}
+
     int hospitalIdCounter =0;
     long citizenIDCounter =0;
     public void addVaccine(){
         int gap;
         Scanner scn = new Scanner(System.in);
         System.out.println("Vaccine Name: ");
-        String name = scn.next();
+        String name = scn.nextLine();
         System.out.println("Number of Doses: ");
         int num = scn.nextInt();
         if (num!=1){
@@ -27,10 +27,13 @@ public class Main {
             gap = scn.nextInt();
             System.out.println("Vaccine Name: "+name+", Number of Doses: "+num+", Gap Between Doses: "+gap);
             Vaccine obj = new Vaccine(name,num,gap);
+            vacRecord.add(obj);
         }
         else{
             System.out.println("Vaccine Name: "+name+", Number of Doses: "+num+", Gap Between Doses: "+0);
             Vaccine obj = new Vaccine(name,num,0);
+            vacRecord.add(obj);
+
         }
 }
 public class Vaccine{
@@ -43,15 +46,37 @@ public class Vaccine{
             this.gap=gap;
         }
 }
+public class Hospital{
+        String name;
+        int pin;
+        int uniqueID ;
+        Hospital(String name,int pin,int uniqueID){
+            this.name=name;
+            this.pin=pin;
+            this.uniqueID=uniqueID;
+        }
+    }
+
+
     public void regHospital(){
         Scanner scn = new Scanner(System.in);
         System.out.println("Hospital Name: ");
+        String name = scn.nextLine();
         hospitalIdCounter+=1;
         int uniqueId = 100000+hospitalIdCounter;
-        String name = scn.next();
         int pin = scn.nextInt();
         System.out.println("Hospital Name: "+name+", Pincode: "+pin+", Unique ID: "+uniqueId);
+        Hospital obj = new Hospital(name,pin,uniqueId);
+        hospitalRecord.add(obj);
+
 }
+    public class Slots{
+        String vaccine;
+        int hospitalID;
+        int slots;
+        int quantity;
+
+    }
     public void makeSlots(){
         String vaccine;
         Scanner scn = new Scanner(System.in);
@@ -73,8 +98,9 @@ public class Vaccine{
         }
         else{
             vaccine="Covi";
-        System.out.println("Slots added by Hospital "+hospitalID+" for Day: "+dayNum+", Available Quantity: "+quantity+" of Vaccine "+vaccine);
+
     }
+            System.out.println("Slots added by Hospital "+hospitalID+" for Day: "+dayNum+", Available Quantity: "+quantity+" of Vaccine "+vaccine);
         }
     }
     public void regCititzen(){
@@ -93,7 +119,6 @@ public class Vaccine{
         }
 
     }
-
     public static void main(String[] args) {
         Scanner scn = new Scanner(System.in);
         System.out.println("CoWin Portal initialized....\n" +
@@ -139,8 +164,5 @@ public class Vaccine{
                 }
             }
         }
-
-
-
     }
 }
