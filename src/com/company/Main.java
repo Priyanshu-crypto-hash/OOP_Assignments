@@ -30,10 +30,24 @@ public void regHospital(){
         int uniqueId = 200000+idCounter;
         String name = scn.next();
         int pin = scn.nextInt();
-        System.out.println("Hospital Name: "+name+", Pincode: "+pin);
-
-
-
+        System.out.println("Hospital Name: "+name+", Pincode: "+pin+", Unique ID: "+uniqueId);
+}
+public void makeSlots(){
+        Scanner scn = new Scanner(System.in);
+        System.out.println("Enter Hospital ID: ");
+        int hospitalID = scn.nextInt();
+        System.out.println("Enter number of slots to be added: ");
+        int slots = scn.nextInt();
+        for (int i=0;i<slots;i++){
+        System.out.println("Enter Day Number: ");
+        int dayNum = scn.nextInt();
+        System.out.println("Enter Quantity: ");
+        int quantity = scn.nextInt();
+        System.out.println("Select Vaccine\n" +
+                "0. Covax\n" +
+                "1. Covi\n");
+        System.out.println("Slots added by Hospital "+hospitalID+" for Day: ");
+    }
 }
     public static void main(String[] args) {
         Scanner scn = new Scanner(System.in);
