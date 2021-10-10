@@ -82,10 +82,7 @@ class Hospital{
         this.name=name;
     }
 
-    private getHosptialName(String id){
-        for(Hospital temp : )
 
-    }
 
 //    Hospital(String name,int pin,int uniqueID){
 //        this.name=name;
@@ -208,7 +205,8 @@ public class Main {
     }
     public static void main(String[] args) {
         Scanner scn = new Scanner(System.in);
-        int counter=0;
+        int vaccinecounter=0;
+        int slotCounter=0;
 
         System.out.println("CoWin Portal initialized....\n" +
                 "---------------------------------\n" +
@@ -244,7 +242,7 @@ public class Main {
                             obj.setGap(gap);
                             obj.setName(name);
                             obj.setNum(num);
-                            obj.setSerialNum(counter);
+                            obj.setSerialNum(vaccinecounter);
                             vacRecord.add(obj);
 
 
@@ -255,10 +253,10 @@ public class Main {
                             obj.setGap(0);
                             obj.setName(name);
                             obj.setNum(num);
-                            obj.setSerialNum(counter);
+                            obj.setSerialNum(vaccinecounter);
                             vacRecord.add(obj);
                         }
-                        counter+=1;
+                        vaccinecounter+=1;
                 }
                 else if (n==2){
 
@@ -335,6 +333,8 @@ public class Main {
 
                 }
                 else if (n==5){
+                    String hospId;
+                    int sno=0;
                     System.out.println("Enter patient Unique ID: ");
                     long uniqueID = scn.nextLong();
                     System.out.println("1. Search by area\n" +
@@ -352,11 +352,13 @@ public class Main {
 
 
                         }
-                        System.out.println("Entry Hospital ID: ");
-                        Hospital temp = hospitalRecord.get(0);
-                        System.out.println(temp.getUniqueID()+" "+temp.getName());
-                        System.out.println("Enter hospital ID: ");
-                        int hospId= scn.nextInt();
+                        System.out.println("Enter Hospital ID: ");
+                        hospId=scn.nextLine();
+                        for(Slots temp: slotsRecord ){
+                            if (temp.getHospitalID().equals(hospId)){
+                                System.out.println(slotCounter+"->Day: "+temp.getDay()+" Vaccine: "+temp.getVacname()+" Available Qty: "+ temp.quantity);
+                            }
+                        }
                         break;
 
                     }
@@ -373,10 +375,12 @@ public class Main {
                             }
                         }
                         System.out.println("Entry Hospital ID: ");
-                        Hospital temp = hospitalRecord.get(0);
-                        System.out.println(temp.getUniqueID()+" "+temp.getName());
-                        System.out.println("Enter hospital ID: ");
-                        int hospId= scn.nextInt();
+                        hospId=scn.nextLine();
+                        for(Slots temp: slotsRecord ){
+                            if (temp.getHospitalID().equals(hospId)){
+                                System.out.println(slotCounter+"->Day: "+temp.getDay()+" Vaccine: "+temp.getVacname()+" Available Qty: "+ temp.quantity);
+                            }
+                        }
                         break;
                     }
                     else if (opt ==3){
@@ -392,7 +396,6 @@ public class Main {
                         if (temp.getHospitalID().equals(hospID)){
                             System.out.println("Day: "+temp.getDay()+" Vaccine: "+temp.getVacname()+" Available Qty: "+ temp.quantity);
                         }
-
                     }
 
                 }
