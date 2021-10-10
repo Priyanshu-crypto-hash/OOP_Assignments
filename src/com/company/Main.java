@@ -1,4 +1,5 @@
 package com.company;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -6,6 +7,16 @@ class Vaccine{
     private String name;
     private int num;
     private int gap;
+    private int serialNum;
+
+    public int getSerialNum() {
+        return serialNum;
+    }
+
+    public void setSerialNum(int serialNum) {
+        this.serialNum = serialNum;
+    }
+
     public String getName(){
         return name;
     }
@@ -36,9 +47,12 @@ class Vaccine{
 class Hospital{
     private String name;
     private int pin;
-    private int uniqueID ;
+    private String uniqueID ;
 
-    public int getUniqueID() {
+
+
+
+    public String getUniqueID() {
         return uniqueID;
     }
 
@@ -54,7 +68,7 @@ class Hospital{
         this.pin = pin;
     }
 
-    public void setUniqueID(int uniqueID) {
+    public void setUniqueID(String uniqueID) {
         this.uniqueID = uniqueID;
     }
 
@@ -69,7 +83,8 @@ class Hospital{
 //    }
 }
  class Slots{
-    String vaccine;
+    String vacname;
+    int day;
     int doses;
     int gap;
     int hospitalID;
@@ -77,7 +92,54 @@ class Hospital{
     long citizenID;
     int quantity;
 
-}
+     public int getDay() {
+         return day;
+     }
+
+     public void setDay(int day) {
+         this.day = day;
+     }
+
+     public int getGap() {
+         return gap;
+     }
+
+     public void setGap(int gap) {
+         this.gap = gap;
+     }
+
+     public String getVacname() {
+         return vacname;
+     }
+
+     public void setVacname(String vacname) {
+         this.vacname = vacname;
+     }
+
+     public int getDoses() {
+         return doses;
+     }
+
+     public void setDoses(int doses) {
+         this.doses = doses;
+     }
+
+     public int getQuantity() {
+         return quantity;
+     }
+
+     public void setQuantity(int quantity) {
+         this.quantity = quantity;
+     }
+
+     public int getHospitalID() {
+         return hospitalID;
+     }
+
+     public void setSlots(int slots) {
+         this.slots = slots;
+     }
+ }
  class Citizens{
     private String name;
     private int age;
@@ -117,7 +179,7 @@ public class Main {
     public static ArrayList<Vaccine> vacRecord = new ArrayList<Vaccine>();
     public static ArrayList<Hospital> hospitalRecord = new ArrayList<Hospital>();
     public static ArrayList<Citizens> citizenRecord = new ArrayList<Citizens>();
-    public static ArrayList<Slots> slotsRecord = new ArrayList<Slots>();
+    public static  ArrayList<Slots> slotsRecord = new ArrayList<Slots>();
     public static int hospitalIdCounter =0;
     public static long citizenIDCounter =0;
     public void regHospital(){
@@ -153,6 +215,7 @@ public class Main {
 
                 if (n==1){
                         int gap;
+                        int counter=0;
                         System.out.println("Vaccine Name: ");
                         String name = scn.nextLine();
                         System.out.println("Number of Doses: ");
@@ -162,7 +225,11 @@ public class Main {
                             gap = scn.nextInt();
                             System.out.println("Vaccine Name: "+name+", Number of Doses: "+num+", Gap Between Doses: "+gap);
                             Vaccine obj = new Vaccine();
-
+                            obj.setGap(gap);
+                            obj.setName(name);
+                            obj.setNum(num);
+                            obj.setSerialNum(counter);
+                            counter+=1;
                             vacRecord.add(obj);
                         }
                         else {
@@ -171,7 +238,10 @@ public class Main {
                             obj.setGap(0);
                             obj.setName(name);
                             obj.setNum(num);
+                            obj.setSerialNum(counter);
+                            counter+=1;
                             vacRecord.add(obj);
+
 
                         }
                 }
@@ -181,13 +251,15 @@ public class Main {
                     String name = scn.nextLine();
                     hospitalIdCounter+=1;
                     int uniqueId = 100000+hospitalIdCounter;
+                    String uniquehospID =String.valueOf(uniqueId);
                     int pin = scn.nextInt();
                     System.out.println("Hospital Name: "+name+", Pincode: "+pin+", Unique ID: "+uniqueId);
                     Hospital obj = new Hospital();
                     obj.setName(name);
                     obj.setPin(pin);
-                    obj.setUniqueID(uniqueId);
+                    obj.setUniqueID(uniquehospID);
                     hospitalRecord.add(obj);
+
 
                 }
                 else if (n==3){
@@ -213,6 +285,7 @@ public class Main {
 
                 }
                 else if (n==4){
+                    int counter=0;
                     String vaccine;
                     System.out.println("Enter Hospital ID: ");
                     int hospitalID = scn.nextInt();
@@ -223,17 +296,33 @@ public class Main {
                         int dayNum = scn.nextInt();
                         System.out.println("Enter Quantity: ");
                         int quantity = scn.nextInt();
-                        System.out.println("Select Vaccine\n" +
-                                "0. Covax\n" +
-                                "1. Covi\n");
-                        int temp = scn.nextInt();
-                        if (temp == 0) {
-                            vaccine = "Covax";
-                        } else {
-                            vaccine = "Covi";
+                        System.out.println("Select Vaccine\n");
+                        for(Vaccine temp : vacRecord ){
+                            System.out.println(temp.getSerialNum()+". "+temp.getName());
                         }
-                        System.out.println("Slots added by Hospital " + hospitalID + " for Day: " + dayNum + ", Available Quantity: " + quantity + " of Vaccine " + vaccine);
+                        int m = scn.nextInt();
+
+                        for(Vaccine temp : vacRecord){
+                            if(m==temp.getSerialNum()){
+
+                                vaccine = temp.getName();
+                                System.out.println("Slots added by Hospital " + hospitalID + " for Day: " + dayNum + ", Available Quantity: " + quantity + " of Vaccine " + vaccine);
+                                Slots obj = new Slots();
+                                obj.setVacname(vaccine);
+                                obj.setQuantity(quantity);
+                                obj.setDay(dayNum);
+                                slotsRecord.add(obj);
+
+
+
+
+                            }
+                        }
+
+
                     }
+
+
                 }
 
                 else if (n==5){
@@ -267,13 +356,22 @@ public class Main {
 
                     }
 
-
-
                 }
                 else if (n==6){
+                    System.out.println("Enter Hospital Id: ");
+                    int hospID =scn.nextInt();
+                    for(Slots temp: slotsRecord ){
+                        System.out.println("Day");
+                    }
 
                 }
                 else if (n==7){
+                    System.out.println("Enter Patient ID: ");
+                    int patientID = scn.nextInt();
+
+
+
+
 
                 }
             }
