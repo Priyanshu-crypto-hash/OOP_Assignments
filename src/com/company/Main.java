@@ -7,15 +7,9 @@ class Vaccine{
     private String name;
     private int num;
     private int gap;
-    private int serialNum;
 
-    public int getSerialNum() {
-        return serialNum+1;
-    }
 
-    public void setSerialNum(int serialNum) {
-        this.serialNum = serialNum;
-    }
+
 
     public String getName(){
         return name;
@@ -162,7 +156,7 @@ class Hospital{
     private String name;
     private String vacGiven;
     private int totalDoses;
-    private int age;
+
     private String uniqueID;
     private String status;
     public String getStatus(){
@@ -191,18 +185,14 @@ class Hospital{
      public String getname(){
         return name;
     }
-    public int getage(){
-        return age;
-    }
+
     public String getUniqueID(){
         return uniqueID;
     }
     public void setName(String name){
         this.name=name;
     }
-    public void setAge(int age){
-        this.age=age;
-    }
+
     public void setUniqueID(String uniqueID){
         this.uniqueID=uniqueID;
     }
@@ -267,7 +257,7 @@ public class Main {
                             obj.setGap(gap);
                             obj.setName(name);
                             obj.setNum(num);
-                            obj.setSerialNum(vaccinecounter);
+
                             vacRecord.add(obj);
 
                         }
@@ -277,7 +267,7 @@ public class Main {
                             obj.setGap(0);
                             obj.setName(name);
                             obj.setNum(num);
-                            obj.setSerialNum(vaccinecounter);
+
                             vacRecord.add(obj);
 
                         }
@@ -316,7 +306,8 @@ public class Main {
                                 "--------------------------------");
                     }
                     Citizens obj = new Citizens();
-                    obj.setAge(age);
+
+
                     obj.setName(name);
                     obj.setStatus("REGISTERED");
                     obj.setUniqueID(uniqueID);
@@ -342,14 +333,14 @@ public class Main {
                         for(int l=0;l<hospitalRecord.size();l++){
                             boolean flag = true;
                             if (hospitalRecord.get(l).getUniqueID().equals(hospitalID)) {
-                                System.out.println("gg2");
+
                                 Slots obj3 = new Slots();
                                 obj3.setDay(dayNum);
                                 for (int r = 0; r < hospitalRecord.get(l).getSlotsrec().size(); r++) {
-                                    System.out.println("gg3");
+
                                     if (hospitalRecord.get(l).getSlotsrec().get(r).getVacname().equals(vacRecord.get(m).getName()) && hospitalRecord.get(l).getSlotsrec().get(r).getDay() == dayNum)
                                     {
-                                        System.out.println("gg4");
+
                                         hospitalRecord.get(l).getSlotsrec().get(r).setQuantity(hospitalRecord.get(l).getSlotsrec().get(r).getQuantity() + quantity);
                                         flag = false;
                                     }
@@ -363,26 +354,18 @@ public class Main {
                                 hospitalRecord.get(l).setSlotsrec(obj3);
                                 System.out.println(obj3.getVacname());
                                 System.out.println(obj3.getQuantity());
-                                System.out.println("gg8");
+
 
                             }
                         }
-                        for(int t=0;t<slotsRecord.size();t++){
-                            System.out.println(slotsRecord.get(t).getVacname());
-                            System.out.println(slotsRecord.get(t).getQuantity());
-                            System.out.println(slotsRecord.get(t).getHospitalID());
-                            System.out.println(slotsRecord.get(t).getDay());
-                            System.out.println(slotsRecord.get(t).getDoses());
-                            System.out.println(slotsRecord.get(t).getGap());
 
-                        }
                         for(int p =0;p<hospitalRecord.size();p++){
-                            if (hospitalRecord.get(p).getUniqueID().equals(vacRecord.get(m).getName())){
+                            if (hospitalRecord.get(p).getUniqueID().equals(hospitalID)){
 
                                 for(int s=0;s<hospitalRecord.get(p).getSlotsrec().size();s++){
-                                        System.out.println("gg1");
+
                                         if(hospitalRecord.get(p).getSlotsrec().get(s).getVacname().equals(vacRecord.get(m).getName()) &&hospitalRecord.get(p).getSlotsrec().get(s).getDay()==dayNum){
-                                        System.out.println("gg");
+
                                         System.out.println("Slots added by Hospital " + hospitalID + " for Day: " + dayNum + ", Available Quantity: " + hospitalRecord.get(p).getSlotsrec().get(s).getQuantity() + " of Vaccine " + hospitalRecord.get(p).getSlotsrec().get(s).getVacname());
                                     }
 
@@ -396,7 +379,7 @@ public class Main {
                 else if (n==5){
                     String hospId;
 
-                    int sno=0;
+
                     System.out.println("Enter patient Unique ID: ");
                     String uniqueID = scn.next();
                     System.out.println("1. Search by area\n" +
@@ -423,12 +406,16 @@ public class Main {
                         for(int i =0;i<templist.size();i++){
                             System.out.println(i+"->Day: "+templist.get(i).getDay()+" Vaccine: "+templist.get(i).getVacname()+" Available Qty: "+ templist.get(i).getQuantity());
                         }
+                        System.out.println("Choose Slot: ");
                         int choice = scn.nextInt();
-                        Citizens obj2 = new Citizens();
                         for(int i =0;i<citizenRecord.size();i++){
+                            System.out.println("gg");
                             if (uniqueID.equals(citizenRecord.get(i).getUniqueID())){
+                                System.out.println(citizenRecord.get(i).getname()+"Vaccinated with "+templist.get(choice).getVacname());
+                                System.out.println("gg1");
                                     citizenRecord.get(i).setVacGiven(templist.get(choice).getVacname());
                                     for(int j =0;j<vacRecord.size();j++){
+                                        System.out.println("gg2");
                                     if (vacRecord.get(j).getName().equals(templist.get(choice).getVacname())){
                                         if(vacRecord.get(j).getGap()==1){
                                             citizenRecord.get(i).setStatus("FULLY VACCINATED");
@@ -441,7 +428,7 @@ public class Main {
                                     }
                                 }
                             }
-                        }break;
+                        }
                         }
                     else if (opt == 2){
                         ArrayList<Slots> tempList = new ArrayList<>();
@@ -467,26 +454,42 @@ public class Main {
                             System.out.println(i+"->Day: "+tempList.get(i).getDay()+" Vaccine: "+tempList.get(i).getVacname()+" Available Qty: "+ tempList.get(i).getQuantity());
                         }
                         int choice = scn.nextInt();
-                        Citizens obj2 = new Citizens();
+
                         for(int i =0;i<citizenRecord.size();i++){
                             if (uniqueID.equals(citizenRecord.get(i).getUniqueID())){
                                 System.out.println(citizenRecord.get(i).getname()+"Vaccinated with "+tempList.get(choice).getVacname());
+                                for(int w=0;w<hospitalRecord.size();w++){ //decrease quantity
+                                    if(hospId.equals(hospitalRecord.get(w).getUniqueID())){
+                                        for(int e=0;e<hospitalRecord.get(w).getSlotsrec().size();e++){
+                                            if(hospitalRecord.get(w).getSlotsrec().get(e).getVacname().equals(vacRecord.get(choice).getName()) &&hospitalRecord.get(w).getSlotsrec().get(e).getDay()==choice){
+                                                hospitalRecord.get(w).getSlotsrec().get(e).setQuantity(hospitalRecord.get(w).getSlotsrec().get(e).getQuantity()-1);
+                                            }
+                                        }
+                                    }
+                                }
                                 citizenRecord.get(i).setVacGiven(tempList.get(choice).getVacname());
+                                for(int j=0;j<vacRecord.size();j++){
+                                    if (vacRecord.get(j).getName().equals(tempList.get(choice).getVacname())){
+
+                                    }
+
+                                }
+
                                 for(int j =0;j<vacRecord.size();j++){
                                     if (vacRecord.get(j).getName().equals(tempList.get(choice).getVacname())){
-                                        if(vacRecord.get(j).getGap()==1){
+                                        if(vacRecord.get(j).getGap()==1  ){
                                             citizenRecord.get(i).setStatus("FULLY VACCINATED");
-
+                                            citizenRecord.get(i).setTotalDoses(vacRecord.get(j).getNum());
                                         }
                                         else{
                                             citizenRecord.get(i).setStatus("PARTIALLY VACCINATED");
                                         }
-                                        citizenRecord.get(i).setTotalDoses(vacRecord.get(j).getNum());
+
                                     }
                                 }
                             }
                         }
-                        break;
+
                     }
                     else if (opt ==3){
                         break;
