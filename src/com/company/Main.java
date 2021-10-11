@@ -114,6 +114,7 @@ class Hospital{
          this.day = day;
      }
 
+
      public int getGap() {
          return gap;
      }
@@ -156,9 +157,28 @@ class Hospital{
     private String name;
     private String vacGiven;
     private int totalDoses;
+    private int day;
+    private int gap;
+     private String uniqueID;
+     private String status;
 
-    private String uniqueID;
-    private String status;
+     public void setGap(int gap) {
+         this.gap = gap;
+     }
+
+     public int getGap() {
+         return gap;
+     }
+
+     public int getDay() {
+         return day;
+     }
+
+     public void setDay(int day) {
+         this.day = day;
+     }
+
+
     public String getStatus(){
         return status;
     }
@@ -378,8 +398,6 @@ public class Main {
                 }
                 else if (n==5){
                     String hospId;
-
-
                     System.out.println("Enter patient Unique ID: ");
                     String uniqueID = scn.next();
                     System.out.println("1. Search by area\n" +
@@ -388,7 +406,7 @@ public class Main {
                     System.out.println("Enter option: ");
                     int opt = scn.nextInt();
                     if (opt ==1){
-                        ArrayList<Slots> templist = new ArrayList<>();
+                        ArrayList<Slots> tempList = new ArrayList<>();
                         System.out.println("Enter Pin Code: ");
                         int pinCode = scn.nextInt();
                         for(Hospital temp: hospitalRecord){
@@ -400,35 +418,50 @@ public class Main {
                         hospId=scn.next();
                         for(Slots temp: slotsRecord ){
                             if (temp.getHospitalID().equals(hospId)){
-                                templist.add(temp);
+                                tempList.add(temp);
                             }
                         }
-                        for(int i =0;i<templist.size();i++){
-                            System.out.println(i+"->Day: "+templist.get(i).getDay()+" Vaccine: "+templist.get(i).getVacname()+" Available Qty: "+ templist.get(i).getQuantity());
+                        for(int i =0;i<tempList.size();i++){
+                            System.out.println(i+"->Day: "+tempList.get(i).getDay()+" Vaccine: "+tempList.get(i).getVacname()+" Available Qty: "+ tempList.get(i).getQuantity());
                         }
                         System.out.println("Choose Slot: ");
                         int choice = scn.nextInt();
                         for(int i =0;i<citizenRecord.size();i++){
-                            System.out.println("gg");
                             if (uniqueID.equals(citizenRecord.get(i).getUniqueID())){
-                                System.out.println(citizenRecord.get(i).getname()+"Vaccinated with "+templist.get(choice).getVacname());
-                                System.out.println("gg1");
-                                    citizenRecord.get(i).setVacGiven(templist.get(choice).getVacname());
-                                    for(int j =0;j<vacRecord.size();j++){
-                                        System.out.println("gg2");
-                                    if (vacRecord.get(j).getName().equals(templist.get(choice).getVacname())){
-                                        if(vacRecord.get(j).getGap()==1){
-                                            citizenRecord.get(i).setStatus("FULLY VACCINATED");
+                                System.out.println(citizenRecord.get(i).getname()+"Vaccinated with "+tempList.get(choice).getVacname());
+                                for(int w=0;w<hospitalRecord.size();w++){ //decrease quantity
+                                    if(hospId.equals(hospitalRecord.get(w).getUniqueID())){
+                                        for(int e=0;e<hospitalRecord.get(w).getSlotsrec().size();e++){
+                                            if(hospitalRecord.get(w).getSlotsrec().get(e).getVacname().equals(vacRecord.get(choice).getName()) &&hospitalRecord.get(w).getSlotsrec().get(e).getDay()==choice){
+                                                hospitalRecord.get(w).getSlotsrec().get(e).setQuantity(hospitalRecord.get(w).getSlotsrec().get(e).getQuantity()-1);
+                                            }
+                                        }
+                                    }
+                                }
+                                citizenRecord.get(i).setVacGiven(tempList.get(choice).getVacname());
+                                citizenRecord.get(i).setDay(tempList.get(choice).getDay());
+                                citizenRecord.get(i).setGap(tempList.get(choice).getGap());
+                                for(int j=0;j<vacRecord.size();j++){
+                                    if (vacRecord.get(j).getName().equals(tempList.get(choice).getVacname())){
+                                        citizenRecord.get(i).setTotalDoses(vacRecord.get(j).getNum());
+                                    }
+                                }
 
+                                for(int j =0;j<citizenRecord.size();j++){
+                                    if (vacRecord.get(choice).getName().equals(tempList.get(choice).getVacname())){
+                                        if(vacRecord.get(choice).getGap()==0 && citizenRecord.get(j).getTotalDoses()==1){
+                                            citizenRecord.get(i).setStatus("FULLY VACCINATED");
                                         }
                                         else{
                                             citizenRecord.get(i).setStatus("PARTIALLY VACCINATED");
                                         }
-                                        citizenRecord.get(i).setTotalDoses(vacRecord.get(j).getNum());
+
                                     }
                                 }
                             }
                         }
+
+
                         }
                     else if (opt == 2){
                         ArrayList<Slots> tempList = new ArrayList<>();
@@ -453,6 +486,7 @@ public class Main {
                         for(int i =0;i<tempList.size();i++){
                             System.out.println(i+"->Day: "+tempList.get(i).getDay()+" Vaccine: "+tempList.get(i).getVacname()+" Available Qty: "+ tempList.get(i).getQuantity());
                         }
+                        System.out.println("Choose Slot: ");
                         int choice = scn.nextInt();
 
                         for(int i =0;i<citizenRecord.size();i++){
@@ -468,18 +502,18 @@ public class Main {
                                     }
                                 }
                                 citizenRecord.get(i).setVacGiven(tempList.get(choice).getVacname());
+                                citizenRecord.get(i).setDay(tempList.get(choice).getDay());
+                                citizenRecord.get(i).setGap(tempList.get(choice).getGap());
                                 for(int j=0;j<vacRecord.size();j++){
                                     if (vacRecord.get(j).getName().equals(tempList.get(choice).getVacname())){
-
+                                        citizenRecord.get(i).setTotalDoses(vacRecord.get(j).getNum());
                                     }
-
                                 }
 
-                                for(int j =0;j<vacRecord.size();j++){
-                                    if (vacRecord.get(j).getName().equals(tempList.get(choice).getVacname())){
-                                        if(vacRecord.get(j).getGap()==1  ){
+                                for(int j =0;j<citizenRecord.size();j++){
+                                    if (vacRecord.get(choice).getName().equals(tempList.get(choice).getVacname())){
+                                        if(vacRecord.get(choice).getGap()==0 && citizenRecord.get(j).getTotalDoses()==1){
                                             citizenRecord.get(i).setStatus("FULLY VACCINATED");
-                                            citizenRecord.get(i).setTotalDoses(vacRecord.get(j).getNum());
                                         }
                                         else{
                                             citizenRecord.get(i).setStatus("PARTIALLY VACCINATED");
@@ -522,6 +556,9 @@ public class Main {
                             System.out.println("PARTIALLY VACCINATED");
                             System.out.println("Vaccine Given: "+temp.getVacGiven());
                             System.out.println("Number of Doses given: ");
+
+                            System.out.println("Next Dose due date: ");
+                            System.out.println(temp.getGap()+ temp.getDay());
 
                         }
 
