@@ -325,9 +325,6 @@ public class Main {
                 }
                 else if (n==4){
 
-
-                    Hospital obj1= new Hospital();
-                    String vaccine;
                     System.out.println("Enter Hospital ID: ");
                     String hospitalID = scn.next();
                     System.out.println("Enter number of slots to be added: ");
@@ -345,11 +342,14 @@ public class Main {
                         for(int l=0;l<hospitalRecord.size();l++){
                             boolean flag = true;
                             if (hospitalRecord.get(l).getUniqueID().equals(hospitalID)) {
+                                System.out.println("gg2");
                                 Slots obj3 = new Slots();
                                 obj3.setDay(dayNum);
                                 for (int r = 0; r < hospitalRecord.get(l).getSlotsrec().size(); r++) {
+                                    System.out.println("gg3");
                                     if (hospitalRecord.get(l).getSlotsrec().get(r).getVacname().equals(vacRecord.get(m).getName()) && hospitalRecord.get(l).getSlotsrec().get(r).getDay() == dayNum)
                                     {
+                                        System.out.println("gg4");
                                         hospitalRecord.get(l).getSlotsrec().get(r).setQuantity(hospitalRecord.get(l).getSlotsrec().get(r).getQuantity() + quantity);
                                         flag = false;
                                     }
@@ -357,17 +357,38 @@ public class Main {
                                 if (flag) {
                                     obj3.setQuantity(quantity);
                                 }
+                                obj3.setHospitalID(hospitalID);
                                 obj3.setVacname(vacRecord.get(m).getName());
                                 slotsRecord.add(obj3);
                                 hospitalRecord.get(l).setSlotsrec(obj3);
+                                System.out.println(obj3.getVacname());
+                                System.out.println(obj3.getQuantity());
+                                System.out.println("gg8");
 
                             }
                         }
+                        for(int t=0;t<slotsRecord.size();t++){
+                            System.out.println(slotsRecord.get(t).getVacname());
+                            System.out.println(slotsRecord.get(t).getQuantity());
+                            System.out.println(slotsRecord.get(t).getHospitalID());
+                            System.out.println(slotsRecord.get(t).getDay());
+                            System.out.println(slotsRecord.get(t).getDoses());
+                            System.out.println(slotsRecord.get(t).getGap());
+
+                        }
                         for(int p =0;p<hospitalRecord.size();p++){
-                            for(int s=0;s<hospitalRecord.get(p).getSlotsrec().size();s++){
-                                if(hospitalRecord.get(p).getSlotsrec().get(s).getVacname().equals(vacRecord.get(m).getName()) &&hospitalRecord.get(p).getSlotsrec().get(s).getDay()==dayNum)
-                                System.out.println("Slots added by Hospital " + hospitalID + " for Day: " + dayNum + ", Available Quantity: " + hospitalRecord.get(p).getSlotsrec().get(s).getQuantity() + " of Vaccine " + hospitalRecord.get(p).getSlotsrec().get(s).getVacname());
+                            if (hospitalRecord.get(p).getUniqueID().equals(vacRecord.get(m).getName())){
+
+                                for(int s=0;s<hospitalRecord.get(p).getSlotsrec().size();s++){
+                                        System.out.println("gg1");
+                                        if(hospitalRecord.get(p).getSlotsrec().get(s).getVacname().equals(vacRecord.get(m).getName()) &&hospitalRecord.get(p).getSlotsrec().get(s).getDay()==dayNum){
+                                        System.out.println("gg");
+                                        System.out.println("Slots added by Hospital " + hospitalID + " for Day: " + dayNum + ", Available Quantity: " + hospitalRecord.get(p).getSlotsrec().get(s).getQuantity() + " of Vaccine " + hospitalRecord.get(p).getSlotsrec().get(s).getVacname());
+                                    }
+
+                                }
                             }
+
                         }
                     }
                     System.out.println("---------------------------------");
