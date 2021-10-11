@@ -91,18 +91,21 @@ class Hospital{
 //    }
 }
  class Slots{
+
     private String vacname;
     private int day;
     private int doses;
     private int gap;
     private String hospitalID;
-    private int slots;
-    private long citizenID;
+
+
     private int quantity;
 
+     private int doseCounter;
 
-
-
+     public void setDoseCounter(){
+         this.doseCounter+=1;
+     }
      public void setHospitalID(String hospitalID) {
          this.hospitalID = hospitalID;
      }
@@ -154,16 +157,13 @@ class Hospital{
          return hospitalID;
      }
 
-     public void setSlots(int slots) {
-         this.slots = slots;
-     }
  }
  class Citizens{
     private String name;
     private String vacGiven;
     private int totalDoses;
     private int age;
-    private long uniqueID;
+    private String uniqueID;
     private String status;
     public String getStatus(){
         return status;
@@ -194,7 +194,7 @@ class Hospital{
     public int getage(){
         return age;
     }
-    public long getUniqueID(){
+    public String getUniqueID(){
         return uniqueID;
     }
     public void setName(String name){
@@ -203,7 +203,7 @@ class Hospital{
     public void setAge(int age){
         this.age=age;
     }
-    public void setUniqueID(long uniqueID){
+    public void setUniqueID(String uniqueID){
         this.uniqueID=uniqueID;
     }
 
@@ -301,8 +301,6 @@ public class Main {
                     hospitalRecord.add(obj);
                     System.out.println("---------------------------------");
 
-
-
                 }
                 else if (n==3){
                     citizenIDCounter+=1;
@@ -311,7 +309,7 @@ public class Main {
                     System.out.println("Age: ");
                     int age = scn.nextInt();
                     System.out.println("Unique ID: ");
-                    long uniqueID = scn.nextLong();
+                    String uniqueID = scn.next();
                     System.out.println("Citizen Name: "+name+", Age: "+age+", Unique ID: "+uniqueID);
                     if (age<18){
                         System.out.println("Only above 18 are allowed\n" +
@@ -370,9 +368,10 @@ public class Main {
                 }
                 else if (n==5){
                     String hospId;
+                    ArrayList<Slots> templist = new ArrayList<>();
                     int sno=0;
                     System.out.println("Enter patient Unique ID: ");
-                    long uniqueID = scn.nextLong();
+                    String uniqueID = scn.next();
                     System.out.println("1. Search by area\n" +
                             "2. Search by Vaccine\n" +
                             "3. Exit");
@@ -385,20 +384,38 @@ public class Main {
                             if (pinCode==temp.getPin()){
                                 System.out.println(temp.getUniqueID()+" "+temp.getName());
                             }
-
                         }
                         System.out.println("Enter Hospital ID: ");
                         hospId=scn.next();
                         for(Slots temp: slotsRecord ){
                             if (temp.getHospitalID().equals(hospId)){
-                                System.out.println(sno+"->Day: "+temp.getDay()+" Vaccine: "+temp.getVacname()+" Available Qty: "+ temp.getQuantity());
-                                sno+=1;
+                                templist.add(temp);
+
                             }
                         }
+                        for(int i =0;i<templist.size();i++){
+                            System.out.println(i+"->Day: "+templist.get(i).getDay()+" Vaccine: "+templist.get(i).getVacname()+" Available Qty: "+ templist.get(i).getQuantity());
+                        }
                         int choice = scn.nextInt();
+                        Citizens obj2 = new Citizens();
+                        for(int i =0;i<citizenRecord.size();i++){
+                            if (uniqueID.equals(citizenRecord.get(i).getUniqueID())){
+                                    citizenRecord.get(i).setVacGiven(templist.get(choice).getVacname());
+                                    for(int j =0;j<vacRecord.size();j++){
+                                    if (vacRecord.get(j).getName().equals(templist.get(choice).getVacname())){
+                                        if(vacRecord.get(j).getGap()==1){
+                                            citizenRecord.get(i).setStatus("FULLY VACCINATED");
 
-                        break;
-                    }
+                                        }
+                                        else{
+                                            citizenRecord.get(i).setStatus("PARTIALLY VACCINATED");
+                                        }
+                                        citizenRecord.get(i).setTotalDoses(vacRecord.get(j).getNum());
+                                    }
+                                }
+                            }
+                        }break;
+                        }
                     else if (opt == 2){
                         System.out.println("Enter Vaccine name: ");
                         String VacName=scn.next();
@@ -435,11 +452,11 @@ public class Main {
                             System.out.println("Day: "+temp.getDay()+" Vaccine: "+temp.getVacname()+" Available Qty: "+ temp.getQuantity());
                         }
                     }
-
                 }
                 else if (n==7){
                     System.out.println("Enter Patient ID: ");
                     int patientID = scn.nextInt();
+
                     for (Citizens temp : citizenRecord){
                         if (temp.getStatus().equals("REGISTERED")){
                             System.out.println("Citizen REGISTERED");
@@ -449,11 +466,16 @@ public class Main {
                         }
                         else if (temp.getStatus().equals("PARTIALLY VACCINATED")){
                             System.out.println("PARTIALLY VACCINATED");
+                            System.out.println("Vaccine Given: "+temp.getVacGiven());
+                            System.out.println("Number of Doses given: ");
+
                         }
+
 
                     }
 
                     System.out.println("---------------------------------");
+
                 }
             }
         }
