@@ -1,11 +1,27 @@
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Scanner;
-public interface client {
+ interface client {
     void viewLecture();
     void viewAssessments();
     void viewComments();
     void addComments();
+}
+class Lectures{
+     private String topic;
+     private int numOfSlides;
+     private HashMap<Integer,String> slidesMap = new HashMap<>();
+     final Date d = new Date();
+     private String instructorName;
+}
+class Assessments{
+     private String problem;
+     private int maxMarks;
+     private HashMap<Integer,String> assMap = new HashMap<>();
+     private String instructorName;
+
+
 }
 class Student implements client {
     @Override
@@ -170,11 +186,8 @@ class ass2 {
                              "6. Add comments\n" +
                              "7. Logout");
                      int b = scn.nextInt();
-                     if (b==0){
-                         
-                     }
-                     else if (b==1){
-                         
+                     if (b==1){
+
                      }
                      else if (b==2){
 
@@ -194,6 +207,10 @@ class ass2 {
                      else if (b==7){
 
                      }
+                     else if (b==8){
+                         break;
+
+                     }
 
                  }
 
@@ -206,4 +223,3 @@ class ass2 {
         
     }
 }
-
