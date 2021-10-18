@@ -1,4 +1,6 @@
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Scanner;
@@ -11,19 +13,106 @@ import java.util.Scanner;
 class Lectures{
      private String topic;
      private int numOfSlides;
-     private HashMap<Integer,String> slidesMap = new HashMap<>();
-     final Date d = new Date();
      private String instructorName;
+     private ArrayList<String> lecturesMaterialRecord = new ArrayList<>();
+     private boolean video;
+     private HashMap<Integer,String> slidesMap = new HashMap<>();
+     private Date d;
+
+    public boolean isVideo() {
+        return video;
+    }
+
+    public void setVideo(boolean video) {
+        this.video = video;
+    }
+
+    public Date getD() {
+        return d;
+    }
+
+    public void setD(Date d) {
+        this.d = d;
+    }
+
+    public void setLecturesMaterialRecord(String slide) {
+        lecturesMaterialRecord.add(slide);
+    }
+
+    public ArrayList<String> getLecturesMaterialRecord() {
+        return lecturesMaterialRecord;
+    }
+
+    public int getNumOfSlides() {
+        return numOfSlides;
+    }
+
+    public void setNumOfSlides(int numOfSlides) {
+        this.numOfSlides = numOfSlides;
+    }
+
+    public String getInstructorName() {
+        return instructorName;
+    }
+
+    public void setInstructorName(String instructorName) {
+        this.instructorName = instructorName;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
+    }
+
+    public String getTopic() {
+        return topic;
+    }
+
+    public void setSlidesMap(HashMap<Integer, String> slidesMap) {
+        this.slidesMap = slidesMap;
+    }
 }
 class Assessments{
      private String problem;
      private int maxMarks;
-     private HashMap<Integer,String> assMap = new HashMap<>();
      private String instructorName;
+     private HashMap<Integer,String> assMap = new HashMap<>();
+     private Date d;
 
+    public Date getD() {
+        return d;
+    }
 
+    public void setD(Date d) {
+        this.d = d;
+    }
+
+    public void setInstructorName(String instructorName) {
+        this.instructorName = instructorName;
+    }
+
+    public String getInstructorName() {
+        return instructorName;
+    }
+
+    public String getProblem() {
+        return problem;
+    }
+
+    public void setProblem(String problem) {
+        this.problem = problem;
+    }
+
+    public int getMaxMarks() {
+        return maxMarks;
+
+    }
+
+    public void setMaxMarks(int maxMarks) {
+        this.maxMarks = maxMarks;
+    }
 }
 class Student implements client {
+     private Lectures lectureRef;
     @Override
     public void addComments() {
 
@@ -41,8 +130,29 @@ class Student implements client {
 
     @Override
     public void viewLecture() {
+        for(Lectures temp: ass2.lecturesRecord){
+            if(!temp.isVideo()){
+                System.out.println("Title: "+temp.getTopic());
+                for(int i=0;i<temp.getNumOfSlides();i++){
+                    System.out.println("Slide: "+i+1+": "+temp.getLecturesMaterialRecord().get(i));
 
+                }
+                System.out.println("Number of slides: "+temp.getNumOfSlides());
+                System.out.println("Date of upload: "+temp.getD());
+                System.out.println("Uploaded by: "+temp.getInstructorName());
+            }
+        }
+        for(Lectures temp: ass2.lecturesRecord){
+            if(temp.isVideo()){
+                System.out.println("Title of Video: "+temp.getTopic());
+                System.out.println("Video file: "+temp.getLecturesMaterialRecord().get(0));
+                System.out.println("Date of upload: "+temp.getD());
+                System.out.println("Uploaded by: "+temp.getInstructorName());
+            }
+        }
     }
+
+
 
 
 }
@@ -64,6 +174,26 @@ class Instructor implements client{
 
     @Override
     public void viewLecture() {
+        for(Lectures temp: ass2.lecturesRecord){
+            if(!temp.isVideo()){
+                System.out.println("Title: "+temp.getTopic());
+                for(int i=0;i<temp.getNumOfSlides();i++){
+                    System.out.println("Slide: "+i+1+": "+temp.getLecturesMaterialRecord().get(i));
+
+                }
+                System.out.println("Number of slides: "+temp.getNumOfSlides());
+                System.out.println("Date of upload: "+temp.getD());
+                System.out.println("Uploaded by: "+temp.getInstructorName());
+            }
+        }
+        for(Lectures temp: ass2.lecturesRecord){
+            if(temp.isVideo()){
+                System.out.println("Title of Video: "+temp.getTopic());
+                System.out.println("Video file: "+temp.getLecturesMaterialRecord().get(0));
+                System.out.println("Date of upload: "+temp.getD());
+                System.out.println("Uploaded by: "+temp.getInstructorName());
+            }
+        }
 
     }
     public void addClassMaterial(){
@@ -86,15 +216,21 @@ class discussion{
 
 
 class ass2 {
+     public static ArrayList<Lectures> lecturesRecord = new ArrayList<>();
+     ArrayList<Student> studentsClient = new ArrayList<>();
+    ArrayList<Student> instructorsClient = new ArrayList<>();
     HashMap<Integer,Instructor> instructorMap = new HashMap<>();
     HashMap<Integer,Student> studentMap = new HashMap<>();
+    HashMap<Integer,Lectures> lecturesMap = new HashMap<>();
+    HashMap<Integer,Assessments> assessmentsMap = new HashMap<>();
     public static void main(String[] args) {
 
+        ArrayList<Instructor> instructorRecord = new ArrayList<>();
+        ArrayList<Student> studentsRecord = new ArrayList<>();
+
+        ArrayList<Assessments > assessmentsRecord = new ArrayList<>();
         Scanner scn = new Scanner(System.in);
-
-
         while (true){
-
             System.out.println("Welcome to Backpack\n" +
                     "1. Enter as instructor\n" +
                     "2. Enter as student\n" +
@@ -124,9 +260,97 @@ class ass2 {
                              "9. Logout");
                      int b = scn.nextInt();
                      if (b==1){
+                         System.out.println("1. Add Lecture Slide\n" +
+                                 "2. Add Lecture Video");
+                         int c = scn.nextInt();
+                         if(c==1){
+                             Lectures obj = new Lectures();
+                             System.out.println("Enter topic of slides: ");
+                             String topic = scn.nextLine();
+                             System.out.println("Enter content of slides: ");
+                             int numOfSlides = scn.nextInt();
+                             if (a==0){
+                                 obj.setInstructorName("I0");
+                             }
+                             else if(a==1){
+                                 obj.setInstructorName("I1");
+                             }
+                             obj.setNumOfSlides(numOfSlides);
+                             obj.setTopic(topic);
+                             obj.setVideo(false);
+                             obj.setD(new Date());
+                             for(int i=0;i<numOfSlides;i++){
+                                 System.out.println("Content of slide "+i+": ");
+                                 String content = scn.nextLine();
+                                 obj.setLecturesMaterialRecord(content);
+                             }
+                             lecturesRecord.add(obj);
+
+
+
+
+                         }
+                         else if (c==2){
+                             Lectures obj = new Lectures();
+                             System.out.println("Enter topic of video: ");
+                             String topic = scn.nextLine();
+                             System.out.println("Enter filename of video: ");
+                             String fileName = scn.nextLine();
+                             if(fileName.substring(fileName.length()-4).equals(".mp4")){
+                                 obj.setLecturesMaterialRecord(fileName);
+                                 obj.setVideo(true);
+                                 obj.setD(new Date());
+                                 lecturesRecord.add(obj);
+
+                             }
+                             else{
+                                 System.out.println("Video Format Should be .mp4");
+                                 break;
+                             }
+                         }
+                         else {
+                             break;
+                         }
+
 
                      }
                      else if (b==2){
+                         System.out.println("1. Add Assignment\n" +
+                                 "2. Add Quiz");
+                         int c = scn.nextInt();
+                         if (c==1){
+                             Assessments obj = new Assessments();
+                             System.out.println("Enter Problem Statement: ");
+                             String prob = scn.nextLine();
+                             obj.setProblem(prob);
+                             System.out.println("Enter max marks: ");
+                             int maxMarks = scn.nextInt();
+                             obj.setMaxMarks(maxMarks);
+                             obj.setD(new Date());
+                             if (a==0){
+                                 obj.setInstructorName("I0");
+
+                             }
+                             else if (a==1){
+                                 obj.setInstructorName("I1");
+                             }
+                             assessmentsRecord.add(obj);
+
+
+                         }
+                         else if(c==2){
+                             Assessments obj = new Assessments();
+                             System.out.println("Enter quiz question: ");
+                             String question = scn.nextLine();
+                             obj.setProblem(question);
+                             obj.setD(new Date());
+                             
+
+                         }
+                         else {
+                             System.out.println("Wrong Input ");
+                             break;
+                         }
 
                      }
                      else if (b==3){
