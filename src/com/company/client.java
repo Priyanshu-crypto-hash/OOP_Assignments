@@ -75,13 +75,13 @@ class Lectures{
 }
 class Assessments{
     private HashMap<Student,String > subMap = new HashMap<>();
-    private HashMap<Assessments,Integer> gradeMap = new HashMap<>();
-    public HashMap<Assessments, Integer> getgradeMap()
+    private HashMap<Student,Integer> gradeMap = new HashMap<>();
+    public HashMap<Student, Integer> getgradeMap()
     {
         return gradeMap;
     }
-    public void setGradeMap(Assessments ass , int a) {
-        gradeMap.put(ass,a);
+    public void setGradeMap(Student s , int a) {
+        gradeMap.put(s,a);
     }
     public HashMap<Student, String> getsubMap()
     {
@@ -170,44 +170,31 @@ class Student implements client {
     private int studentID;
      private String name;
      private HashMap<Assessments,Integer> submissionMap = new HashMap<>(); // -1 if deadline is closed,0 if not submitted,1 if submitted
-     private HashMap<Assessments,Integer> statusMap = new HashMap<>(); // -1 if assignment is ungraded
-
-
+     private HashMap<Assessments,Integer> statusMap = new HashMap<>(); // 0 if assignment is ungraded
     public void setStudentID(int studentID) {
         this.studentID = studentID;
     }
-
     public int getStudentID() {
         return studentID;
     }
-
-
-
     public HashMap<Assessments, Integer> getStatusMap() {
         return statusMap;
     }
-
     public HashMap<Assessments, Integer> getSubmissionMap() {
         return submissionMap;
     }
-
     public void setStatusMap( Assessments ass , int a) {
         statusMap.put(ass,a);
     }
-
-
     public void setSubmissionMap(Assessments ass,int a) {
         submissionMap.put(ass,a);
     }
-
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
-
     @Override
     public void addComments(String name) {
         Scanner scn = new Scanner(System.in);
@@ -425,7 +412,6 @@ class ass2 {
                     "2. Enter as student\n" +
                     "3. Exit");
              int n = scn.nextInt();
-
              if (n==1){
                  System.out.println("Instructors: ");
                  for(int i=0;i<instructorMap.size();i++){
@@ -509,9 +495,10 @@ class ass2 {
 
                                      Assessments obj = new Assessments();
                                      System.out.println("Enter Problem Statement: ");
+                                     scn.nextLine();
                                      String prob = scn.nextLine();
                                      obj.setProblem(prob);
-                                     scn.nextLine();
+
                                      System.out.println("Enter max marks: ");
                                      int maxMarks = scn.nextInt();
                                      obj.setMaxMarks(maxMarks);
@@ -521,6 +508,7 @@ class ass2 {
                                      obj.setAssID(assessmentsRecord.indexOf(obj));
                                      for(int k=0;k<studentMap.size();k++){
                                          studentMap.get("S"+k).setStatusMap(obj,0);
+                                         studentMap.get("S"+k).setSubmissionMap(obj,0);
                                      }
 
 
@@ -530,17 +518,18 @@ class ass2 {
 
                                      Assessments obj = new Assessments();
                                      System.out.println("Enter quiz question: ");
+                                     scn.nextLine();
                                      String question = scn.nextLine();
                                      obj.setInstructorName("I"+a);
                                      obj.setProblem(question);
                                      obj.setD(new Date());
                                      obj.setQuiz(true);
                                      assessmentsRecord.add(obj);
-                                     scn.nextLine();
                                      obj.setAssID(assessmentsRecord.indexOf(obj));
                                      for(int k=0;k<studentMap.size();k++){
                                          studentMap.get("S"+k).setStatusMap(obj,0);
                                      }
+
 
                                  }
                                  else {
@@ -573,6 +562,7 @@ class ass2 {
                                      }
                                      System.out.println("Enter ID of assessment to view submissions: ");
                                      int id = scn.nextInt();
+                                     
                                      if(studentMap.get(i).getSubmissionMap().size()!=0){
                                          System.out.println("Choose ID from these ungraded submissions");
                                          for(Assessments l : studentMap.get(i).getSubmissionMap().keySet()){
@@ -604,8 +594,9 @@ class ass2 {
                                              if (l.getAssID()==id){
                                                  for(Student s : l.getsubMap().keySet()){
                                                      if(s.getStudentID()==e){
-                                                         l.setGradeMap(l,marks);
-                                                         s.setSubmissionMap(l,1);
+                                                         l.setGradeMap(s,marks);
+                                                         s.setStatusMap(l,1);
+
                                                      }
                                                  }
                                              }
@@ -666,7 +657,7 @@ class ass2 {
              }
              else if (n==2){
                  System.out.println("Students: ");
-                 for(int i=0;i<instructorMap.size();i++){
+                 for(int i=0;i<studentMap.size();i++){
                      System.out.println(i+" - "+"S"+i);
                  }
                  int a = scn.nextInt();
@@ -700,13 +691,13 @@ class ass2 {
                                              }
                                              else if (temp.isQuiz()){
                                                  System.out.println("ID: "+temp.getAssID()+" Question: "+temp.getProblem());
-
                                              }
                                          }
                                      }
                                      System.out.println("Enter ID of assessment: ");
                                      int id = scn.nextInt();
-                                     System.out.println("Enter File name of assessment: "); //submitting the ass
+                                     System.out.println("Enter File name of assessment: ");
+                                     scn.nextLine();//submitting the ass
                                      String fileName = scn.nextLine();
                                      if(fileName.substring(fileName.length()-4).equals(".zip") && fileName.length()>4){
                                          for(Assessments temp: studentMap.get(i).getSubmissionMap().keySet()){
@@ -718,7 +709,6 @@ class ass2 {
                                          for(Assessments temp: studentMap.get(i).getSubmissionMap().keySet()){ //changing the status
                                              if(temp.getAssID()==id){
                                                  studentMap.get(i).getSubmissionMap().put(temp,1);
-
                                              }
                                          }
                                      }
@@ -728,10 +718,28 @@ class ass2 {
                                      }
                                  }
 
-
                              }
                              else if (b==4){
                                  System.out.println("Graded Submissions");
+                                 for(Assessments as : studentMap.get(i).getSubmissionMap().keySet()){
+                                     if(studentMap.get(i).getSubmissionMap().get(as)==1){
+                                         System.out.println("gg1");
+                                         if(studentMap.get(i).getStatusMap().get(as)==1){
+                                             System.out.println("gg2");
+                                             System.out.println("Submission: " +as.getsubMap().get(studentMap.get(i)));
+                                             System.out.println("Marks Scored: "+as.getgradeMap().get(studentMap.get(i)));
+                                         }
+                                     }
+                                 }
+                                 System.out.println("Ungraded Submissions");
+                                 for(Assessments as : studentMap.get(i).getSubmissionMap().keySet()){
+                                     if(studentMap.get(i).getSubmissionMap().get(as)==0){
+                                         if(studentMap.get(i).getStatusMap().get(as)==1){
+                                             System.out.println("Submission: " +as.getsubMap().get(studentMap.get(i)));
+                                         }
+                                     }
+                                 }
+
 
                              }
                              else if (b==5){
